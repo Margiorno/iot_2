@@ -1,0 +1,353 @@
+[
+    {
+        "id": "46a026e88a88580b",
+        "type": "mqtt in",
+        "z": "fe7dea6ba7436a6f",
+        "name": "",
+        "topic": "PK/MZ",
+        "qos": "2",
+        "datatype": "json",
+        "broker": "broker_hivemq_pkmz_clean",
+        "nl": false,
+        "rap": true,
+        "inputs": 0,
+        "x": 90,
+        "y": 140,
+        "wires": [
+            [
+                "f101144b7cb80b8b",
+                "6869f1bcbd429a88",
+                "07d5e52fc1d3cd5c",
+                "3f6308ee0bced79b"
+            ]
+        ]
+    },
+    {
+        "id": "f101144b7cb80b8b",
+        "type": "influxdb out",
+        "z": "fe7dea6ba7436a6f",
+        "influxdb": "",
+        "name": "",
+        "measurement": "pomiary_bmp280",
+        "precision": "s",
+        "retentionPolicy": "",
+        "database": "",
+        "retentionPolicyV18Flux": "",
+        "org": "pk",
+        "bucket": "pk",
+        "x": 340,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "3f6308ee0bced79b",
+        "type": "change",
+        "z": "fe7dea6ba7436a6f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "ostatni_pomiar",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 390,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6869f1bcbd429a88",
+        "type": "change",
+        "z": "fe7dea6ba7436a6f",
+        "name": "temperature",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.temp_czujnik_C",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 350,
+        "y": 100,
+        "wires": [
+            [
+                "ebca4fd185793e2b"
+            ]
+        ]
+    },
+    {
+        "id": "07d5e52fc1d3cd5c",
+        "type": "change",
+        "z": "fe7dea6ba7436a6f",
+        "name": "pressure",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.cisnienie_hPa",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 340,
+        "y": 150,
+        "wires": [
+            [
+                "96934638ee40f4c2"
+            ]
+        ]
+    },
+    {
+        "id": "375ebd571049ae6f",
+        "type": "http in",
+        "z": "fe7dea6ba7436a6f",
+        "name": "",
+        "url": "/last",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 100,
+        "y": 280,
+        "wires": [
+            [
+                "28afed4764950221"
+            ]
+        ]
+    },
+    {
+        "id": "28afed4764950221",
+        "type": "change",
+        "z": "fe7dea6ba7436a6f",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "ostatni_pomiar",
+                "tot": "global"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 340,
+        "y": 280,
+        "wires": [
+            [
+                "613e3703daf8a17d"
+            ]
+        ]
+    },
+    {
+        "id": "613e3703daf8a17d",
+        "type": "http response",
+        "z": "fe7dea6ba7436a6f",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 580,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "936456a4caf06c96",
+        "type": "http in",
+        "z": "fe7dea6ba7436a6f",
+        "name": "",
+        "url": "/history",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 110,
+        "y": 360,
+        "wires": [
+            [
+                "6fa28cbd00769e4a"
+            ]
+        ]
+    },
+    {
+        "id": "6fa28cbd00769e4a",
+        "type": "influxdb in",
+        "z": "fe7dea6ba7436a6f",
+        "influxdb": "",
+        "name": "",
+        "query": "from(bucket: \"pk\")\n  |> range(start: -1h)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"pomiary_bmp280\")",
+        "rawOutput": true,
+        "precision": "s",
+        "retentionPolicy": "",
+        "org": "pk",
+        "x": 320,
+        "y": 360,
+        "wires": [
+            [
+                "1f273b99a2abf992"
+            ]
+        ]
+    },
+    {
+        "id": "1f273b99a2abf992",
+        "type": "http response",
+        "z": "fe7dea6ba7436a6f",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 580,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "ebca4fd185793e2b",
+        "type": "ui_chart",
+        "z": "fe7dea6ba7436a6f",
+        "name": "temperature",
+        "group": "52f57ffa0519229d",
+        "order": 1,
+        "width": 6,
+        "height": 4,
+        "label": "temperature",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": "",
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#ff4d4d",
+            "#aec7e8",
+            "#ff7f0e",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 570,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "96934638ee40f4c2",
+        "type": "ui_chart",
+        "z": "fe7dea6ba7436a6f",
+        "name": "pressure",
+        "group": "52f57ffa0519229d",
+        "order": 2,
+        "width": 6,
+        "height": 4,
+        "label": "pressure",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": "",
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#4ade80",
+            "#aec7e8",
+            "#ff7f0e",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 560,
+        "y": 150,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "broker_hivemq_pkmz_clean",
+        "type": "mqtt-broker",
+        "name": "HiveMQ Public Broker",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true
+    },
+    {
+        "id": "52f57ffa0519229d",
+        "type": "ui_group",
+        "name": "Panel Pomiarowy",
+        "tab": "482236cd861eab82",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "482236cd861eab82",
+        "type": "ui_tab",
+        "name": "BMP280 Dashboard",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "28468e92d9f65d5a",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-influxdb": "0.7.0",
+            "node-red-dashboard": "3.6.6"
+        }
+    }
+]
