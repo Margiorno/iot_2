@@ -1,0 +1,582 @@
+[
+    {
+        "id": "761aa6e090b74533",
+        "type": "mqtt in",
+        "z": "7259411886ab8bed",
+        "name": "",
+        "topic": "PK/MZ",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "ef251b58f7158279",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 100,
+        "y": 140,
+        "wires": [
+            [
+                "c8b1d8a9406e83c6",
+                "eb0c6029776815d1",
+                "f4b265c1f52010f8"
+            ]
+        ]
+    },
+    {
+        "id": "c8b1d8a9406e83c6",
+        "type": "influxdb out",
+        "z": "7259411886ab8bed",
+        "influxdb": "2b51c764a5ad1834",
+        "name": "",
+        "measurement": "tempCis",
+        "precision": "s",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "pk",
+        "bucket": "pk",
+        "x": 420,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "2a1b3b200d31cda7",
+        "type": "inject",
+        "z": "7259411886ab8bed",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 110,
+        "y": 300,
+        "wires": [
+            [
+                "50633638abc64fd7"
+            ]
+        ]
+    },
+    {
+        "id": "50633638abc64fd7",
+        "type": "http request",
+        "z": "7259411886ab8bed",
+        "name": "",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://api.open-meteo.com/v1/forecast?latitude=50.06&longitude=19.94&current=temperature_2m,pressure_msl",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 350,
+        "y": 300,
+        "wires": [
+            [
+                "0d45c66a50839f54",
+                "13128a53ba64d536",
+                "934f0997954d6cc0"
+            ]
+        ]
+    },
+    {
+        "id": "22bf015a159c2011",
+        "type": "debug",
+        "z": "7259411886ab8bed",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 890,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "efef20b2e7c19d1d",
+        "type": "influxdb out",
+        "z": "7259411886ab8bed",
+        "influxdb": "2b51c764a5ad1834",
+        "name": "",
+        "measurement": "tempOpenMeteo",
+        "precision": "s",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "pk",
+        "bucket": "pk",
+        "x": 990,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "b8bfc857ddc71204",
+        "type": "ui-chart",
+        "z": "7259411886ab8bed",
+        "group": "4cf5039212534c8a",
+        "name": "",
+        "label": "",
+        "order": 1,
+        "chartType": "line",
+        "category": "topic",
+        "categoryType": "msg",
+        "xAxisLabel": "",
+        "xAxisProperty": "",
+        "xAxisPropertyType": "timestamp",
+        "xAxisType": "time",
+        "xAxisFormat": "",
+        "xAxisFormatType": "auto",
+        "xmin": "",
+        "xmax": "",
+        "yAxisLabel": "°C",
+        "yAxisProperty": "payload",
+        "yAxisPropertyType": "msg",
+        "ymin": "",
+        "ymax": "",
+        "bins": 10,
+        "action": "append",
+        "stackSeries": false,
+        "pointShape": "circle",
+        "pointRadius": 4,
+        "showLegend": true,
+        "removeOlder": "1",
+        "removeOlderUnit": "3600",
+        "removeOlderPoints": "",
+        "colors": [
+            "#ff4d4d",
+            "#ff9999",
+            "#ff7f0e",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "textColor": [
+            "#666666"
+        ],
+        "textColorDefault": true,
+        "gridColor": [
+            "#e5e5e5"
+        ],
+        "gridColorDefault": true,
+        "width": "6",
+        "height": "5",
+        "className": "",
+        "interpolation": "smooth",
+        "x": 900,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "86f586b60cd42aea",
+        "type": "ui-chart",
+        "z": "7259411886ab8bed",
+        "group": "a2813697cc559317",
+        "name": "",
+        "label": "",
+        "order": 1,
+        "chartType": "line",
+        "category": "topic",
+        "categoryType": "msg",
+        "xAxisLabel": "",
+        "xAxisProperty": "",
+        "xAxisPropertyType": "timestamp",
+        "xAxisType": "time",
+        "xAxisFormat": "",
+        "xAxisFormatType": "auto",
+        "xmin": "",
+        "xmax": "",
+        "yAxisLabel": "hPa",
+        "yAxisProperty": "payload",
+        "yAxisPropertyType": "msg",
+        "ymin": "",
+        "ymax": "",
+        "bins": 10,
+        "action": "append",
+        "stackSeries": false,
+        "pointShape": "circle",
+        "pointRadius": 4,
+        "showLegend": true,
+        "removeOlder": "1",
+        "removeOlderUnit": "3600",
+        "removeOlderPoints": "",
+        "colors": [
+            "#4ade80",
+            "#99ff99",
+            "#2ca02c",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "textColor": [
+            "#666666"
+        ],
+        "textColorDefault": true,
+        "gridColor": [
+            "#e5e5e5"
+        ],
+        "gridColorDefault": true,
+        "width": "6",
+        "height": "5",
+        "className": "",
+        "interpolation": "smooth",
+        "x": 900,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "eb0c6029776815d1",
+        "type": "change",
+        "z": "7259411886ab8bed",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.temp_czujnik_C",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "ESP32 Temperatura",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 620,
+        "y": 120,
+        "wires": [
+            [
+                "b8bfc857ddc71204"
+            ]
+        ]
+    },
+    {
+        "id": "f4b265c1f52010f8",
+        "type": "change",
+        "z": "7259411886ab8bed",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.cisnienie_hPa",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "ESP32 Ciśnienie",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 620,
+        "y": 160,
+        "wires": [
+            [
+                "86f586b60cd42aea"
+            ]
+        ]
+    },
+    {
+        "id": "0d45c66a50839f54",
+        "type": "change",
+        "z": "7259411886ab8bed",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.current.temperature_2m",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "OpenMeteo Temperatura",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 620,
+        "y": 240,
+        "wires": [
+            [
+                "b8bfc857ddc71204"
+            ]
+        ]
+    },
+    {
+        "id": "13128a53ba64d536",
+        "type": "change",
+        "z": "7259411886ab8bed",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.current.pressure_msl",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "OpenMeteo Ciśnienie",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 620,
+        "y": 280,
+        "wires": [
+            [
+                "86f586b60cd42aea"
+            ]
+        ]
+    },
+    {
+        "id": "934f0997954d6cc0",
+        "type": "change",
+        "z": "7259411886ab8bed",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "temp1",
+                "pt": "msg",
+                "to": "payload.current.temperature_2m",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "pressure1",
+                "pt": "msg",
+                "to": "msg.payload.current.pressure_msl000",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 620,
+        "y": 340,
+        "wires": [
+            [
+                "22bf015a159c2011",
+                "efef20b2e7c19d1d"
+            ]
+        ]
+    },
+    {
+        "id": "ef251b58f7158279",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.hivemq.com",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "2b51c764a5ad1834",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": 8086,
+        "protocol": "http",
+        "database": "database",
+        "name": "",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "http://localhost:8086",
+        "timeout": 10,
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "4cf5039212534c8a",
+        "type": "ui-group",
+        "name": "mqtt",
+        "page": "13b2c50b135e6b4a",
+        "width": 6,
+        "height": 1,
+        "order": 1,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "a2813697cc559317",
+        "type": "ui-group",
+        "name": "Sensors",
+        "page": "13b2c50b135e6b4a",
+        "width": 6,
+        "height": 1,
+        "order": 2,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "13b2c50b135e6b4a",
+        "type": "ui-page",
+        "name": "Page 1",
+        "ui": "2489ea91da7284be",
+        "path": "/page1",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "ab1b029d23941ee6",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 1,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "2489ea91da7284be",
+        "type": "ui-base",
+        "name": "My Dashboard",
+        "path": "/dashboard",
+        "appIcon": "",
+        "includeClientData": true,
+        "acceptsClientConfig": [
+            "ui-notification",
+            "ui-control"
+        ],
+        "showPathInSidebar": false,
+        "headerContent": "page",
+        "navigationStyle": "default",
+        "titleBarStyle": "default",
+        "showReconnectNotification": true,
+        "notificationDisplayTime": 1,
+        "showDisconnectNotification": true,
+        "allowInstall": false
+    },
+    {
+        "id": "ab1b029d23941ee6",
+        "type": "ui-theme",
+        "name": "Default Theme",
+        "colors": {
+            "surface": "#ffffff",
+            "primary": "#0094CE",
+            "bgPage": "#eeeeee",
+            "groupBg": "#ffffff",
+            "groupOutline": "#cccccc"
+        },
+        "sizes": {
+            "density": "default",
+            "pagePadding": "12px",
+            "groupGap": "12px",
+            "groupBorderRadius": "4px",
+            "widgetGap": "12px"
+        }
+    },
+    {
+        "id": "0c53865acea74a8f",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-influxdb": "0.7.0",
+            "@flowfuse/node-red-dashboard": "1.30.2"
+        }
+    }
+]
